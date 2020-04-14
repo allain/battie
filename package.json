@@ -1,6 +1,6 @@
 {
   "name": "battie",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A Batty tool for building GraphQL backends",
   "main": "./dist/index.js",
   "scripts": {
