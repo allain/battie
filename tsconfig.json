@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "strict": false,
+    "outDir": "./dist",
+    "allowJs": true,
+    "target": "esnext",
+    "sourceMap": false,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "lib": [
+      "DOM",
+      "ESNext"
+    ],
+    "paths": {
+      "*": [
+        "node_modules/*"
+      ]
+    },
+    "declaration": true
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
