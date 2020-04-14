@@ -1,0 +1,32 @@
+{
+  "name": "battie",
+  "version": "0.1.1",
+  "description": "A Batty tool for building GraphQL backends",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "prepublish": "npm run build && npm run test",
+    "test": "jest ./test/"
+  },
+  "author": "Allain Lalonde <allain.lalonde@gmail.com>",
+  "types": "./dist/index.d.ts",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.11.1",
+    "graphql-tag": "^2.10.3",
+    "jest": "^25.3.0",
+    "ts-jest": "^25.3.1",
+    "tsconfig": "^7.0.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "graphql": "^14.6.0",
+    "graphql-tools": "^4.0.7"
+  },
+  "files": [
+    "dist/index.js",
+    "dist/index.d.ts",
+    "README.md"
+  ]
+}
