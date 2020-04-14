@@ -4,11 +4,11 @@ import { EventEmitter } from 'events'
 
 export interface Plugin {
     name: string
-    typeDefs: ITypeDefinitions;
+    typeDefs?: ITypeDefinitions;
     resolvers?: IResolvers<any, any> | Array<IResolvers<any, any>>;
 
-    setup(app: App): Promise<void>
-    teardown(app: App): Promise<void>
+    setup?: (app: App) => Promise<void>
+    teardown?: (app: App) => Promise<void>
 }
 
 export class App extends EventEmitter {
