@@ -11,16 +11,22 @@ export interface Plugin {
     teardown?: (app: App) => Promise<void>
 }
 
+type AppOptions = {
+    context?: any
+}
+
 export class App extends EventEmitter {
-    private plugins = []
+    private _plugins = []
     private _handlers: { [name: string]: Function[] } = {}
     private _setup: boolean = false
     private _preparedSchema: any
+    private _context: any
 
-    constructor(plugins: Plugin[] = []) {
+    constructor(plugins: Plugin[] = [], options: AppOptions = {}) {
         super()
 
-        this.plugins = plugins || []
+        this._context = options.context || {}
+        this._plugins = plugins || []
         this._handlers = {}
 
         this._setup = false
@@ -28,11 +34,11 @@ export class App extends EventEmitter {
     }
 
     addPlugin(plugin: Plugin): void {
-        this.plugins.push(plugin)
+        this._plugins.push(plugin)
     }
 
     plugin(name: string): Plugin | null {
-        return this.plugins.find(p => p.name === name) || null
+        return this._plugins.find(p => p.name === name) || null
     }
 
     handler(name: string, handler: Function) {
@@ -52,7 +58,7 @@ export class App extends EventEmitter {
     async setup() {
         if (this._setup) return
 
-        for (const plugin of this.plugins) {
+        for (const plugin of this._plugins) {
             if (plugin.setup) {
                 await plugin.setup(this)
             }
@@ -63,7 +69,7 @@ export class App extends EventEmitter {
     async teardown() {
         if (!this._setup) return
 
-        for (const plugin of this.plugins) {
+        for (const plugin of this._plugins) {
             if (plugin.teardown) {
                 await plugin.teardown(this)
             }
@@ -72,10 +78,10 @@ export class App extends EventEmitter {
     }
 
     _schema() {
-        if (!this._preparedSchema && this.plugins.filter(p => p.typeDefs).length) {
+        if (!this._preparedSchema && this._plugins.filter(p => p.typeDefs).length) {
             this._preparedSchema = makeExecutableSchema({
-                typeDefs: mergeTypeDefs(this.plugins.map(p => p.typeDefs).filter(Boolean)),
-                resolvers: mergeResolvers(this.plugins.map(p => p.resolvers))
+                typeDefs: mergeTypeDefs(this._plugins.map(p => p.typeDefs).filter(Boolean)),
+                resolvers: mergeResolvers(this._plugins.map(p => p.resolvers))
             })
         }
 
@@ -90,7 +96,7 @@ export class App extends EventEmitter {
             schema,
             source: query,
             variableValues: vars,
-            contextValue: { ...context, app: this }
+            contextValue: { ...context, ...this._context, app: this }
         })
     }
 }
